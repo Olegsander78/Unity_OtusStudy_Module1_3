@@ -17,141 +17,213 @@ public class hw2 : MonoBehaviour
 
     [SerializeField] private int _startVeriableInt = 1;
     [SerializeField] private float _startVeriableFloat = 1f;
+    [SerializeField] private int _arrayLenght;
     [SerializeField] private bool _isIntArray = true;
     [SerializeField] private int[] _intArray;
     [SerializeField] private float[] _floatArray;
 
+
     private void Update()
     {
-        if (ToggleArray.isOn)
+        SwitchInputTypeArray();
+    }
+
+    public void GetVariablesFromIField()
+    {
+        _arrayLenght = int.Parse(IFieldValueArray.text);
+        if (!int.TryParse(IFieldIntVar.text, out _startVeriableInt))
         {
-            TextIntVar.enabled = true;
-            IFieldIntVar.enabled = true;
-            TextFloatVar.enabled = false;
-            IFieldFloatVar.enabled = false;
-            _intArray = new int[Convert.ToInt32(IFieldValueArray.text)];
+            Debug.LogWarning("Invalid Int, try to enter both veriables!");
+        }        
+        if (!float.TryParse(IFieldFloatVar.text, out _startVeriableFloat))
+        {
+            Debug.LogWarning("Invalid Float, try to enter both veriables!");
+        }
+        //_startVeriableInt = int.Parse(IFieldIntVar.text);
+        //_startVeriableFloat = float.Parse(IFieldFloatVar.text);
+    }
+
+    #region [1-2 пункты дз]    
+    public void SimpleGenerateArray()
+    {
+        _isIntArray = ToggleArray.isOn;
+
+        if (_isIntArray)
+        {            
+            GetVariablesFromIField();
+            _intArray = new int[_arrayLenght];
             _intArray[0] = _startVeriableInt;
-            SimpleGenerateArray(_intArray);
 
-
+            for (int i = 1; i < _intArray.Length; i++)
+            {
+                _intArray[i] = (int)Mathf.Pow((int)_intArray[i - 1], 2);
+            }
+            ShowArray("Array task1",_intArray);
         }
-        else
-        {
-            TextIntVar.enabled = false;
-            IFieldIntVar.enabled = false;
-            TextFloatVar.enabled = true;
-            IFieldFloatVar.enabled = true;
-            _floatArray = new float[Convert.ToInt32(IFieldValueArray.text)];
+        else if (!_isIntArray)
+        {            
+            GetVariablesFromIField();
+            _floatArray = new float[_arrayLenght];
             _floatArray[0] = _startVeriableFloat;
-            SimpleGenerateArray(_floatArray);
-        }             
 
-    }
-
-    #region[ Попробовал сделать метод через дженерики , не хватило опыта]
-    //public void GenerateArray<T>(T[] array)
-    //{
-
-    //    for (int i = 1; i < array.Length; i++)
-    //    {
-    //        array[i]=(T)Math.Pow(array[i - 1],array[i - 1]);
-    //    }
-    //}
-
-    #endregion
-
-
-    #region [1-2 пункты дз]
-    public void SimpleGenerateArray(int[] array)
-    {
-
-        for (int i = 1; i < array.Length; i++)
-        {
-            array[i] = (int)Math.Pow(array[i-1], array[i-1]);
+            for (int i = 1; i < _floatArray.Length; i++)
+            {
+                _floatArray[i] = (float)Mathf.Pow(_floatArray[i - 1], 2);
+            }
+            ShowArrayFloat("Array task1",_floatArray);
         }
-        ShowArray(array);
     }
 
-    public void SimpleGenerateArray(float[] array)
-    {
-
-        for (int i = 1; i < array.Length; i++)
-        {
-            array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
-        }
-        ShowArray(array);
-    }
     #endregion
 
     #region [4-й пункт дз]
-    public void GenerateArrayInStartVar(int[] array, int startVar)
+
+    public void GenArrayInputStartVar()
     {
-        array[0]= startVar;
-        for (int i = 1; i < array.Length; i++)
+        _isIntArray = ToggleArray.isOn;
+        if (_isIntArray)
         {
-            array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
+            GenerateArrayInputStartVar(_startVeriableInt);
         }
-        ShowArray(array);
+        else
+        {
+            GenerateArrayInputStartVar(_startVeriableFloat);
+        }
+    }
+    public void GenerateArrayInputStartVar(int startVar)
+    {
+        GetVariablesFromIField();
+        _intArray = new int[_arrayLenght];
+        _intArray[0] = startVar;
+
+        for (int i = 1; i < _intArray.Length; i++)
+        {
+            _intArray[i] = (int)Mathf.Pow((int)_intArray[i - 1], 2);
+        }
+        ShowArray("Array task2",_intArray);
     }
 
-    public void GenerateArrayInStartVar(float[] array, float startVar)
+    public void GenerateArrayInputStartVar(float startVar)
     {
-        array[0] = startVar;
-        for (int i = 1; i < array.Length; i++)
+        GetVariablesFromIField();
+        _floatArray = new float[_arrayLenght];
+        _floatArray[0] = startVar;
+
+        for (int i = 1; i < _floatArray.Length; i++)
         {
-            array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
+            _floatArray[i] = (float)Mathf.Pow(_floatArray[i - 1], 2);
         }
-        ShowArray(array);
+        ShowArrayFloat("Array task2",_floatArray);
     }
     #endregion
 
     #region [5-й пункт дз]
-    public void GenerateArrayInRefStartVar(int[] array,ref  int _startVeriableInt)
+
+    public void GenArrayInputRefStartVar()
     {
-        array[0] = _startVeriableInt;
-        for (int i = 1; i < array.Length; i++)
+        _isIntArray = ToggleArray.isOn;
+        GetVariablesFromIField();
+        if (_isIntArray)
         {
-            array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
+            GenerateArrayInputRefStartVar(ref _startVeriableInt);
         }
-        ShowArray(array);
+        else
+        {
+            GenerateArrayInputRefStartVar(ref _startVeriableFloat);
+        }
+    }
+    public void GenerateArrayInputRefStartVar(ref  int _startVeriableInt)
+    {        
+        _intArray = new int[_arrayLenght];
+        _intArray[0] = _startVeriableInt;
+
+        for (int i = 1; i < _intArray.Length; i++)
+        {
+            _intArray[i] = (int)Mathf.Pow((int)_intArray[i - 1], 2);
+        }
+        ShowArray("Array task3", _intArray);
     }
 
-    public void GenerateArrayInRefStartVar(float[] array, ref float _startVeriableFloat)
+    public void GenerateArrayInputRefStartVar(ref float _startVeriableFloat)
     {
-        array[0] = _startVeriableFloat;
-        for (int i = 1; i < array.Length; i++)
+        _floatArray = new float[_arrayLenght];
+        _floatArray[0] = _startVeriableFloat;
+
+        for (int i = 1; i < _floatArray.Length; i++)
         {
-            array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
+            _floatArray[i] = (float)Mathf.Pow(_floatArray[i - 1], 2);
         }
-        ShowArray(array);
+        ShowArrayFloat("Array task3",_floatArray);
     }
     #endregion
 
     #region [6-й пункт дз]
-    public void GenerateArrayOutStartVar(int[] array , out int _startVeriableInt )
+
+    public void GenArrayOutputStartVar()
     {
-        _startVeriableInt= array[0];
-        for (int i = 1; i < array.Length; i++)
+        _isIntArray = ToggleArray.isOn;
+        GetVariablesFromIField();
+        if (_isIntArray)
         {
-            array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
+            GenerateArrayOutputStartVar(out _startVeriableInt);
         }
-        ShowArray(array);
+        else
+        {
+            GenerateArrayOutputStartVar(out _startVeriableFloat);
+        }
+    }
+    public void GenerateArrayOutputStartVar(out int _startVeriableInt)
+    {
+        _intArray = new int[_arrayLenght];
+        _intArray[0] = int.Parse(IFieldIntVar.text); 
+
+        for (int i = 1; i < _intArray.Length; i++)
+        {
+            _intArray[i] = (int)Mathf.Pow((int)_intArray[i - 1], 2);
+        }
+        _startVeriableInt = _intArray[0];
+
+        ShowArray($"Output: {_startVeriableInt} Array task4 ",_intArray);        
     }
 
-    public void GenerateArrayOutRefStartVar(float[] array, out float _startVeriableFloat)
+    public void GenerateArrayOutputStartVar(out float _startVeriableFloat)
     {
-        _startVeriableFloat = array[0];
-        for (int i = 1; i < array.Length; i++)
+        
+        _floatArray = new float[_arrayLenght];
+        _floatArray[0] = float.Parse(IFieldFloatVar.text);
+
+        for (int i = 1; i < _floatArray.Length; i++)
         {
-            array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
+            _floatArray[i] = (float)Mathf.Pow(_floatArray[i - 1], 2);
         }
-        ShowArray(array);
+        _startVeriableFloat = _floatArray[0];
+        ShowArrayFloat($"Output: {_startVeriableFloat} Array task4 ", _floatArray);
     }
     #endregion
 
-    public void ShowArray(int[] array)
+   
+    public void SwitchInputTypeArray()
     {
-        string viewArray = "";
+        if (ToggleArray.isOn)
+        {
+            IFieldIntVar.gameObject.SetActive(true);
+            TextIntVar.gameObject.SetActive(true);
+            IFieldFloatVar.gameObject.SetActive(false);
+            TextFloatVar.gameObject.SetActive(false);
+        }
+        else
+        {
+            IFieldIntVar.gameObject.SetActive(false);
+            TextIntVar.gameObject.SetActive(false);
+            IFieldFloatVar.gameObject.SetActive(true);
+            TextFloatVar.gameObject.SetActive(true);
+        }
+    }
+
+    public void ShowArray(string numberTask, int[] array)
+    {
+        TextViewArray.text = "";
+        string viewArray = numberTask + ":";
         foreach (var item in array)
         {
             viewArray = viewArray + " "+ item;
@@ -159,9 +231,10 @@ public class hw2 : MonoBehaviour
         TextViewArray.text = viewArray;
     }
 
-    public void ShowArray(float[] array)
+    public void ShowArrayFloat(string numberTask, float[] array)
     {
-        string viewArray = "";
+        TextViewArray.text = "";
+        string viewArray = numberTask+":";
         foreach (var item in array)
         {
             viewArray = viewArray + " " + item;

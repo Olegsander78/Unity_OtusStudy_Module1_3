@@ -49,7 +49,7 @@ public class hw1 : MonoBehaviour
 
         if (!float.TryParse(IFieldfloat.text, out _veriableB))
         {
-            Debug.LogError("Неверно введено значние Float");
+            Debug.LogError("Неверно введено значение Float");
         }
         _veriableC = Convert.ToChar(IFieldChar.text);
         _isVeriableD = ToggleBool.isOn;
