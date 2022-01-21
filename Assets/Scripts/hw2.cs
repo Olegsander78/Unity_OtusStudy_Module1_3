@@ -58,6 +58,7 @@ public class hw2 : MonoBehaviour
         {
             array[i] = (int)Math.Pow(array[i-1], array[i-1]);
         }
+        ShowArray(array);
     }
 
     public void SimpleGenerateArray(float[] array)
@@ -67,6 +68,7 @@ public class hw2 : MonoBehaviour
         {
             array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
         }
+        ShowArray(array);
     }
     #endregion
 
@@ -78,6 +80,7 @@ public class hw2 : MonoBehaviour
         {
             array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
         }
+        ShowArray(array);
     }
 
     public void GenerateArrayInStartVar(float[] array, float startVar)
@@ -87,6 +90,7 @@ public class hw2 : MonoBehaviour
         {
             array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
         }
+        ShowArray(array);
     }
     #endregion
 
@@ -98,6 +102,7 @@ public class hw2 : MonoBehaviour
         {
             array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
         }
+        ShowArray(array);
     }
 
     public void GenerateArrayInRefStartVar(float[] array, ref float _startVeriableFloat)
@@ -107,6 +112,7 @@ public class hw2 : MonoBehaviour
         {
             array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
         }
+        ShowArray(array);
     }
     #endregion
 
@@ -117,7 +123,8 @@ public class hw2 : MonoBehaviour
         for (int i = 1; i < array.Length; i++)
         {
             array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
-        }       
+        }
+        ShowArray(array);
     }
 
     public void GenerateArrayOutRefStartVar(float[] array, out float _startVeriableFloat)
@@ -127,16 +134,28 @@ public class hw2 : MonoBehaviour
         {
             array[i] = (int)Math.Pow(array[i - 1], array[i - 1]);
         }
+        ShowArray(array);
     }
     #endregion
 
     public void ShowArray(int[] array)
     {
-        string viewArray
+        string viewArray = "";
         foreach (var item in array)
         {
-            viewArray.Insert()
+            viewArray = viewArray + " "+ item;
         }
+        TextViewArray.text = viewArray;
+    }
+
+    public void ShowArray(float[] array)
+    {
+        string viewArray = "";
+        foreach (var item in array)
+        {
+            viewArray = viewArray + " " + item;
+        }
+        TextViewArray.text = viewArray;
     }
     public void OnGoToHW1()
     {
