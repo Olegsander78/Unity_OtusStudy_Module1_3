@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Veriables : MonoBehaviour
+public class hw1 : MonoBehaviour
 {
     public InputField IFieldInt;
     public InputField IFieldfloat;
@@ -88,5 +89,10 @@ public class Veriables : MonoBehaviour
             fileStream.Write(varsAll, 0, varsAll.Length);
             TextSaveStatus.text = $" {path} Файл успешно записан!";
         }        
+    }
+
+    public void OnGoToHW2()
+    {
+        SceneManager.LoadScene(1);
     }
 }
