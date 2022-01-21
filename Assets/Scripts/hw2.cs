@@ -12,6 +12,8 @@ public class hw2 : MonoBehaviour
     public InputField IFieldFloatVar;
     public InputField IFieldValueArray;
     public Text TextViewArray;
+    public Text TextIntVar;
+    public Text TextFloatVar;
 
     [SerializeField] private int _startVeriableInt = 1;
     [SerializeField] private float _startVeriableFloat = 1f;
@@ -19,18 +21,27 @@ public class hw2 : MonoBehaviour
     [SerializeField] private int[] _intArray;
     [SerializeField] private float[] _floatArray;
 
-    private void Start()
+    private void Update()
     {
         if (ToggleArray.isOn)
         {
-            _intArray = new int[int.Parse(IFieldValueArray.text)];
+            TextIntVar.enabled = true;
+            IFieldIntVar.enabled = true;
+            TextFloatVar.enabled = false;
+            IFieldFloatVar.enabled = false;
+            _intArray = new int[Convert.ToInt32(IFieldValueArray.text)];
             _intArray[0] = _startVeriableInt;
             SimpleGenerateArray(_intArray);
+
 
         }
         else
         {
-            _floatArray = new float[int.Parse(IFieldValueArray.text)];
+            TextIntVar.enabled = false;
+            IFieldIntVar.enabled = false;
+            TextFloatVar.enabled = true;
+            IFieldFloatVar.enabled = true;
+            _floatArray = new float[Convert.ToInt32(IFieldValueArray.text)];
             _floatArray[0] = _startVeriableFloat;
             SimpleGenerateArray(_floatArray);
         }             
