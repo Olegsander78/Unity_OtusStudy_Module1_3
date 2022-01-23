@@ -18,7 +18,7 @@ public class hw2 : MonoBehaviour
     [SerializeField] private int _startVeriableInt = 1;
     [SerializeField] private float _startVeriableFloat = 1f;
     [SerializeField] private int _arrayLenght;
-    [SerializeField] private bool _isIntArray = true;
+    //[SerializeField] private bool _isIntArray = true;
     [SerializeField] private int[] _intArray;
     [SerializeField] private float[] _floatArray;
 
@@ -46,31 +46,62 @@ public class hw2 : MonoBehaviour
     #region [1-2 пункты дз]    
     public void SimpleGenerateArray()
     {
-        _isIntArray = ToggleArray.isOn;
-
-        if (_isIntArray)
-        {            
+        if (ToggleArray.isOn)
+        {
             GetVariablesFromIField();
             _intArray = new int[_arrayLenght];
             _intArray[0] = _startVeriableInt;
 
             for (int i = 1; i < _intArray.Length; i++)
-            {
-                _intArray[i] = (int)Mathf.Pow((int)_intArray[i - 1], 2);
+            {  
+                try
+                {
+                    long powVar = (long)Mathf.Pow(_intArray[i - 1], 2);
+                    if (powVar <= int.MaxValue && powVar >= int.MinValue)
+                    {
+                        _intArray[i] = (int)powVar;
+                    }
+                    else
+                    {
+                        throw new OverflowException();
+                    }
+                }
+                catch (OverflowException)
+                {
+                    Debug.Log("Overflow Integer exception was caught!");
+                    _intArray[i] = 0;
+                    break;
+                }
             }
-            ShowArray("Array task1",_intArray);
+            ShowArray("Array task1", _intArray);
         }
-        else if (!_isIntArray)
-        {            
+        else
+        {
             GetVariablesFromIField();
             _floatArray = new float[_arrayLenght];
             _floatArray[0] = _startVeriableFloat;
 
             for (int i = 1; i < _floatArray.Length; i++)
             {
-                _floatArray[i] = (float)Mathf.Pow(_floatArray[i - 1], 2);
+                try
+                {
+                    double powVar = (double)Mathf.Pow(_floatArray[i - 1], 2);
+                    if (powVar <= float.MaxValue && powVar >= float.MinValue)
+                    {
+                        _floatArray[i] = (float)powVar;
+                    }
+                    else
+                    {
+                        throw new OverflowException();
+                    }
+                }
+                catch (OverflowException)
+                {
+                    Debug.Log("Overflow Float exception was caught!");
+                    break;
+                }
             }
-            ShowArrayFloat("Array task1",_floatArray);
+            ShowArrayFloat("Array task1", _floatArray);
         }
     }
 
@@ -80,8 +111,7 @@ public class hw2 : MonoBehaviour
 
     public void GenArrayInputStartVar()
     {
-        _isIntArray = ToggleArray.isOn;
-        if (_isIntArray)
+        if (ToggleArray.isOn)
         {
             GenerateArrayInputStartVar(_startVeriableInt);
         }
@@ -121,9 +151,8 @@ public class hw2 : MonoBehaviour
 
     public void GenArrayInputRefStartVar()
     {
-        _isIntArray = ToggleArray.isOn;
         GetVariablesFromIField();
-        if (_isIntArray)
+        if (ToggleArray.isOn)
         {
             GenerateArrayInputRefStartVar(ref _startVeriableInt);
         }
@@ -161,9 +190,8 @@ public class hw2 : MonoBehaviour
 
     public void GenArrayOutputStartVar()
     {
-        _isIntArray = ToggleArray.isOn;
         GetVariablesFromIField();
-        if (_isIntArray)
+        if (ToggleArray.isOn)
         {
             GenerateArrayOutputStartVar(out _startVeriableInt);
         }
@@ -181,9 +209,9 @@ public class hw2 : MonoBehaviour
         {
             _intArray[i] = (int)Mathf.Pow((int)_intArray[i - 1], 2);
         }
-        _startVeriableInt = _intArray[0];
+        _startVeriableInt = _intArray[1];
 
-        ShowArray($"Output: {_startVeriableInt} Array task4 ",_intArray);        
+        ShowArray($"Output array[1]: {_startVeriableInt} Array task4 ",_intArray);        
     }
 
     public void GenerateArrayOutputStartVar(out float _startVeriableFloat)
@@ -196,8 +224,8 @@ public class hw2 : MonoBehaviour
         {
             _floatArray[i] = (float)Mathf.Pow(_floatArray[i - 1], 2);
         }
-        _startVeriableFloat = _floatArray[0];
-        ShowArrayFloat($"Output: {_startVeriableFloat} Array task4 ", _floatArray);
+        _startVeriableFloat = _floatArray[1];
+        ShowArrayFloat($"Output array[1]: {_startVeriableFloat} Array task4 ", _floatArray);
     }
     #endregion
 
@@ -241,6 +269,7 @@ public class hw2 : MonoBehaviour
         }
         TextViewArray.text = viewArray;
     }
+
     public void OnGoToHW1()
     {
         SceneManager.LoadScene(0);
