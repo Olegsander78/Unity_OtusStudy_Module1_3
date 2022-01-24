@@ -24,6 +24,12 @@ public class hw2 : MonoBehaviour
             startVarInt = StartVarInt;
             startVarFloat = StartVarFloat;
         }
+
+        public void PrintStruct()
+        {
+            Debug.Log($"{isIntArray},{arrayLenght},{startVarInt},{startVarFloat}");
+        }
+
     }
 
 
@@ -46,29 +52,7 @@ public class hw2 : MonoBehaviour
     private void Update()
     {
         SwitchInputTypeArray();
-    }
-
-    public void GetVariablesFromIField()
-    {
-        _isIntArray = ToggleArray.isOn;
-        _arrayLenght = int.Parse(IFieldValueArray.text);
-        if (!int.TryParse(IFieldIntVar.text, out _startVariableInt))
-        {
-            Debug.LogWarning("Invalid Int, try to enter both veriables!");
-        }        
-        if (!float.TryParse(IFieldFloatVar.text, out _startVariableFloat))
-        {
-            Debug.LogWarning("Invalid Float, try to enter both veriables!");
-        }
-    }
-
-    //public Data CreateStructData()
-    //{
-    //    GetVariablesFromIField();
-    //    Data dataInstance = new Data(_isIntArray, _arrayLenght, _startVariableInt, _startVariableFloat);
-    //    Debug.Log(dataInstance);
-    //    return dataInstance;
-    //}
+    }    
 
     #region [1-2 пункты дз]    
     public void SimpleGenerateArray()
@@ -256,7 +240,30 @@ public class hw2 : MonoBehaviour
     }
     #endregion
 
-   
+    public void GetVariablesFromIField()
+    {
+        _isIntArray = ToggleArray.isOn;
+        _arrayLenght = int.Parse(IFieldValueArray.text);
+        if (!int.TryParse(IFieldIntVar.text, out _startVariableInt))
+        {
+            Debug.LogWarning("Invalid Int, try to enter both veriables!");
+        }
+        if (!float.TryParse(IFieldFloatVar.text, out _startVariableFloat))
+        {
+            Debug.LogWarning("Invalid Float, try to enter both veriables!");
+        }
+    }
+
+    public void SetVariablesToIFieldFromStruct(Data dataFromStruct)
+    {
+        ToggleArray.isOn = dataFromStruct.isIntArray;
+        IFieldValueArray.text = dataFromStruct.arrayLenght.ToString();
+        IFieldIntVar.text = dataFromStruct.startVarInt.ToString();
+        IFieldFloatVar.text = dataFromStruct.startVarFloat.ToString();
+    }
+
+
+
     public void SwitchInputTypeArray()
     {
         if (ToggleArray.isOn)
@@ -314,27 +321,50 @@ public class hw2 : MonoBehaviour
         Debug.Log(dir);
 
         FileInfo saveFile = new FileInfo(@"./UpdateData/Save.txt");
-        //using (FileStream saveFileStream = saveFile.Open(FileMode.OpenOrCreate,
-        //    FileAccess.ReadWrite, FileShare.None))
-
         using (StreamWriter saveFileStream = new StreamWriter(saveFile.OpenWrite()))
-        {            
-            saveFileStream.Write(dataToSave.isIntArray + "|");
-            saveFileStream.Write(dataToSave.arrayLenght + "|");
-            saveFileStream.Write(dataToSave.startVarInt + "|");
-            saveFileStream.Write(dataToSave.startVarFloat + "|");
+        {
+            saveFileStream.WriteLine(dataToSave.isIntArray);
+            saveFileStream.WriteLine(dataToSave.arrayLenght);
+            saveFileStream.WriteLine(dataToSave.startVarInt);
+            saveFileStream.WriteLine(dataToSave.startVarFloat);
             Debug.Log("Data Save Done!");
-        }            
+        }
     }
 
     [ContextMenu("LoadData")]
     public void LoadData()
     {
-        //DirectoryInfo dir = new DirectoryInfo("./UpdateData");
-        //if (!dir.Exists)
-        //{
-        //    Debug.Log("Folder not found!");
-        //}        
+        Data dataFromLoad = new Data();
+
+        DirectoryInfo dir = new DirectoryInfo("./UpdateData");
+        if (!dir.Exists)
+        {
+            Debug.Log("Folder not found!");
+        }
+        FileInfo loadFile = new FileInfo(@"./UpdateData/Save.txt");
+        if (loadFile.Exists)
+        {
+            using(StreamReader loadFileStream = new StreamReader(loadFile.OpenRead()))
+            {
+                List<string> inputList = new List<string>();
+                for (int i = 0; i < 4; i++)
+                {
+                    inputList.Add(loadFileStream.ReadLine());
+                }
+
+                dataFromLoad.isIntArray = Convert.ToBoolean(inputList[0]);
+                dataFromLoad.arrayLenght = Convert.ToInt32(inputList[1]);
+                dataFromLoad.startVarInt = Convert.ToInt32(inputList[2]);
+                dataFromLoad.startVarFloat = (float)Convert.ToDouble(inputList[3]);
+            }
+
+            dataFromLoad.PrintStruct();
+            SetVariablesToIFieldFromStruct(dataFromLoad);
+        }
+        else
+        {
+            Debug.Log("Error loading data!");
+        }
     }
 
     public void OnGoToHW1()
