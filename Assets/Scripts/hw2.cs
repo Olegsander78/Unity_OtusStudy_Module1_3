@@ -1,9 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+public struct Data
+{
+    public bool isIntArray;
+    public int startVarInt;
+    public float startVarFloat;
+}
 
 public class hw2 : MonoBehaviour
 {
@@ -15,8 +23,8 @@ public class hw2 : MonoBehaviour
     public Text TextIntVar;
     public Text TextFloatVar;
 
-    [SerializeField] private int _startVeriableInt = 1;
-    [SerializeField] private float _startVeriableFloat = 1f;
+    [SerializeField] private int _startVariableInt = 1;
+    [SerializeField] private float _startVariableFloat = 1f;
     [SerializeField] private int _arrayLenght;
     //[SerializeField] private bool _isIntArray = true;
     [SerializeField] private int[] _intArray;
@@ -31,16 +39,14 @@ public class hw2 : MonoBehaviour
     public void GetVariablesFromIField()
     {
         _arrayLenght = int.Parse(IFieldValueArray.text);
-        if (!int.TryParse(IFieldIntVar.text, out _startVeriableInt))
+        if (!int.TryParse(IFieldIntVar.text, out _startVariableInt))
         {
             Debug.LogWarning("Invalid Int, try to enter both veriables!");
         }        
-        if (!float.TryParse(IFieldFloatVar.text, out _startVeriableFloat))
+        if (!float.TryParse(IFieldFloatVar.text, out _startVariableFloat))
         {
             Debug.LogWarning("Invalid Float, try to enter both veriables!");
         }
-        //_startVeriableInt = int.Parse(IFieldIntVar.text);
-        //_startVeriableFloat = float.Parse(IFieldFloatVar.text);
     }
 
     #region [1-2 пункты дз]    
@@ -50,7 +56,7 @@ public class hw2 : MonoBehaviour
         {
             GetVariablesFromIField();
             _intArray = new int[_arrayLenght];
-            _intArray[0] = _startVeriableInt;
+            _intArray[0] = _startVariableInt;
 
             for (int i = 1; i < _intArray.Length; i++)
             {  
@@ -79,7 +85,7 @@ public class hw2 : MonoBehaviour
         {
             GetVariablesFromIField();
             _floatArray = new float[_arrayLenght];
-            _floatArray[0] = _startVeriableFloat;
+            _floatArray[0] = _startVariableFloat;
 
             for (int i = 1; i < _floatArray.Length; i++)
             {
@@ -113,11 +119,11 @@ public class hw2 : MonoBehaviour
     {
         if (ToggleArray.isOn)
         {
-            GenerateArrayInputStartVar(_startVeriableInt);
+            GenerateArrayInputStartVar(_startVariableInt);
         }
         else
         {
-            GenerateArrayInputStartVar(_startVeriableFloat);
+            GenerateArrayInputStartVar(_startVariableFloat);
         }
     }
     public void GenerateArrayInputStartVar(int startVar)
@@ -154,11 +160,11 @@ public class hw2 : MonoBehaviour
         GetVariablesFromIField();
         if (ToggleArray.isOn)
         {
-            GenerateArrayInputRefStartVar(ref _startVeriableInt);
+            GenerateArrayInputRefStartVar(ref _startVariableInt);
         }
         else
         {
-            GenerateArrayInputRefStartVar(ref _startVeriableFloat);
+            GenerateArrayInputRefStartVar(ref _startVariableFloat);
         }
     }
     public void GenerateArrayInputRefStartVar(ref  int _startVeriableInt)
@@ -193,11 +199,11 @@ public class hw2 : MonoBehaviour
         GetVariablesFromIField();
         if (ToggleArray.isOn)
         {
-            GenerateArrayOutputStartVar(out _startVeriableInt);
+            GenerateArrayOutputStartVar(out _startVariableInt);
         }
         else
         {
-            GenerateArrayOutputStartVar(out _startVeriableFloat);
+            GenerateArrayOutputStartVar(out _startVariableFloat);
         }
     }
     public void GenerateArrayOutputStartVar(out int _startVeriableInt)
@@ -268,6 +274,34 @@ public class hw2 : MonoBehaviour
             viewArray = viewArray + " " + item;
         }
         TextViewArray.text = viewArray;
+    }
+
+    [ContextMenu("SaveData")]
+    public void SaveData()
+    {        
+        DirectoryInfo dir = new DirectoryInfo(@"./UpdateData");
+        if (!dir.Exists)
+        {
+            dir.Create();
+        }
+        Debug.Log(dir);
+
+        FileInfo saveFile = new FileInfo(@"./UpdateData/Save.dat");        
+        using (FileStream saveFileStream = saveFile.Open(FileMode.OpenOrCreate,
+            FileAccess.ReadWrite, FileShare.None))
+            {
+
+        }
+    }
+
+    [ContextMenu("LoadData")]
+    public void LoadData()
+    {
+        //DirectoryInfo dir = new DirectoryInfo("./UpdateData");
+        //if (!dir.Exists)
+        //{
+        //    Debug.Log("Folder not found!");
+        //}        
     }
 
     public void OnGoToHW1()
