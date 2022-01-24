@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -81,11 +82,11 @@ public class hw1 : MonoBehaviour
 
         using (FileStream fileStream = fileVariables.Create())
         {
-            byte[] varsOrigin = System.Text.Encoding.Default.GetBytes($"Исходные переменные: {_listOriginVeriables} ");
+            byte[] varsOrigin = Encoding.Default.GetBytes($"Исходные переменные: {_listOriginVeriables} ");
             fileStream.Write(varsOrigin,0,varsOrigin.Length);
-            byte[] varsTransform = System.Text.Encoding.Default.GetBytes($" Преобразованные переменные: {_listTransformVeriables} ");
+            byte[] varsTransform = Encoding.Default.GetBytes($" Преобразованные переменные: {_listTransformVeriables} ");
             fileStream.Write(varsTransform, 0, varsTransform.Length);
-            byte[] varsAll = System.Text.Encoding.Default.GetBytes($" Список всех переменных: { _listAllVeriables} ");
+            byte[] varsAll = Encoding.Default.GetBytes($" Список всех переменных: { _listAllVeriables} ");
             fileStream.Write(varsAll, 0, varsAll.Length);
             TextSaveStatus.text = $" {path} Файл успешно записан!";
         }        

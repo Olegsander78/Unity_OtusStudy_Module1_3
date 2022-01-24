@@ -2,19 +2,31 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public struct Data
-{
-    public bool isIntArray;
-    public int startVarInt;
-    public float startVarFloat;
-}
 
 public class hw2 : MonoBehaviour
 {
+    public struct Data
+    {
+        public bool isIntArray;
+        public int arrayLenght;
+        public int startVarInt;
+        public float startVarFloat;
+
+        public Data(bool IsIntArray, int ArrayLenght, int StartVarInt, float StartVarFloat)
+        {
+            isIntArray = IsIntArray;
+            arrayLenght = ArrayLenght;
+            startVarInt = StartVarInt;
+            startVarFloat = StartVarFloat;
+        }
+    }
+
+
     public Toggle ToggleArray;
     public InputField IFieldIntVar;
     public InputField IFieldFloatVar;
@@ -26,7 +38,7 @@ public class hw2 : MonoBehaviour
     [SerializeField] private int _startVariableInt = 1;
     [SerializeField] private float _startVariableFloat = 1f;
     [SerializeField] private int _arrayLenght;
-    //[SerializeField] private bool _isIntArray = true;
+    [SerializeField] private bool _isIntArray = true;
     [SerializeField] private int[] _intArray;
     [SerializeField] private float[] _floatArray;
 
@@ -38,6 +50,7 @@ public class hw2 : MonoBehaviour
 
     public void GetVariablesFromIField()
     {
+        _isIntArray = ToggleArray.isOn;
         _arrayLenght = int.Parse(IFieldValueArray.text);
         if (!int.TryParse(IFieldIntVar.text, out _startVariableInt))
         {
@@ -48,6 +61,14 @@ public class hw2 : MonoBehaviour
             Debug.LogWarning("Invalid Float, try to enter both veriables!");
         }
     }
+
+    //public Data CreateStructData()
+    //{
+    //    GetVariablesFromIField();
+    //    Data dataInstance = new Data(_isIntArray, _arrayLenght, _startVariableInt, _startVariableFloat);
+    //    Debug.Log(dataInstance);
+    //    return dataInstance;
+    //}
 
     #region [1-2 пункты дз]    
     public void SimpleGenerateArray()
@@ -276,9 +297,15 @@ public class hw2 : MonoBehaviour
         TextViewArray.text = viewArray;
     }
 
+
+   
+
     [ContextMenu("SaveData")]
     public void SaveData()
     {        
+        Data dataToSave = new Data(_isIntArray, _arrayLenght, _startVariableInt, _startVariableFloat);
+        Debug.Log(dataToSave);
+
         DirectoryInfo dir = new DirectoryInfo(@"./UpdateData");
         if (!dir.Exists)
         {
@@ -286,12 +313,18 @@ public class hw2 : MonoBehaviour
         }
         Debug.Log(dir);
 
-        FileInfo saveFile = new FileInfo(@"./UpdateData/Save.dat");        
-        using (FileStream saveFileStream = saveFile.Open(FileMode.OpenOrCreate,
-            FileAccess.ReadWrite, FileShare.None))
-            {
+        FileInfo saveFile = new FileInfo(@"./UpdateData/Save.txt");
+        //using (FileStream saveFileStream = saveFile.Open(FileMode.OpenOrCreate,
+        //    FileAccess.ReadWrite, FileShare.None))
 
-        }
+        using (StreamWriter saveFileStream = new StreamWriter(saveFile.OpenWrite()))
+        {            
+            saveFileStream.Write(dataToSave.isIntArray + "|");
+            saveFileStream.Write(dataToSave.arrayLenght + "|");
+            saveFileStream.Write(dataToSave.startVarInt + "|");
+            saveFileStream.Write(dataToSave.startVarFloat + "|");
+            Debug.Log("Data Save Done!");
+        }            
     }
 
     [ContextMenu("LoadData")]
