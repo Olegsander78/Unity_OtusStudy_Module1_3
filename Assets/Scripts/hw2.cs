@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,7 @@ using UnityEngine.UI;
 
 public class hw2 : MonoBehaviour
 {
+    [Serializable]
     public struct Data
     {
         public bool isIntArray;
@@ -29,7 +31,6 @@ public class hw2 : MonoBehaviour
         {
             Debug.Log($"{isIntArray},{arrayLenght},{startVarInt},{startVarFloat}");
         }
-
     }
 
 
@@ -371,4 +372,32 @@ public class hw2 : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    public void SaveAsBinaryFormat()
+    {
+        Data dataToSave = new Data(_isIntArray, _arrayLenght, _startVariableInt, _startVariableFloat);
+        Debug.Log(dataToSave);
+
+        DirectoryInfo dir = new DirectoryInfo(@"./UpdateData");
+        if (!dir.Exists)
+        {
+            dir.Create();
+        }
+        Debug.Log(dir);
+
+        FileInfo saveFile = new FileInfo(@"./UpdateData/SaveBinary.dat");
+        BinaryFormatter binFormat = new BinaryFormatter();
+        using (Stream saveFileStream = new FileStream(saveFile.FullName, FileMode.OpenOrCreate,
+            FileAccess.Write, FileShare.None))
+        {
+            binFormat.Serialize(saveFileStream, dataToSave);
+            Debug.Log("Data Save Done!");
+        }
+    }
+
+    public void LoadeFromBinaryFormat()
+    {
+
+    }
+
 }
