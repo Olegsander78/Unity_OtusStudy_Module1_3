@@ -361,6 +361,7 @@ public class hw2 : MonoBehaviour
 
             dataFromLoad.PrintStruct();
             SetVariablesToIFieldFromStruct(dataFromLoad);
+            Debug.Log("Data load Done!");
         }
         else
         {
@@ -373,6 +374,7 @@ public class hw2 : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    [ContextMenu("SaveAsBinaryFormat")]
     public void SaveAsBinaryFormat()
     {
         Data dataToSave = new Data(_isIntArray, _arrayLenght, _startVariableInt, _startVariableFloat);
@@ -387,17 +389,40 @@ public class hw2 : MonoBehaviour
 
         FileInfo saveFile = new FileInfo(@"./UpdateData/SaveBinary.dat");
         BinaryFormatter binFormat = new BinaryFormatter();
-        using (Stream saveFileStream = new FileStream(saveFile.FullName, FileMode.OpenOrCreate,
-            FileAccess.Write, FileShare.None))
+        using (FileStream saveFileStream = new FileStream(saveFile.FullName, FileMode.OpenOrCreate))
         {
             binFormat.Serialize(saveFileStream, dataToSave);
-            Debug.Log("Data Save Done!");
+            Debug.Log("Binary data save Done!");
         }
     }
 
+    [ContextMenu("LoadeFromBinaryFormat")]
     public void LoadeFromBinaryFormat()
     {
+        Data dataFromLoadBinery = new Data();
 
+        DirectoryInfo dir = new DirectoryInfo("./UpdateData");
+        if (!dir.Exists)
+        {
+            Debug.Log("Folder not found!");
+        }
+        FileInfo loadFile = new FileInfo(@"./UpdateData/SaveBinary.dat");
+        BinaryFormatter binFormat = new BinaryFormatter();
+
+        if (loadFile.Exists)
+        {
+            using (FileStream loadFileStream = new FileStream(loadFile.FullName, FileMode.OpenOrCreate))
+            {               
+                dataFromLoadBinery = (Data)binFormat.Deserialize(loadFileStream);
+            }
+
+            dataFromLoadBinery.PrintStruct();
+            SetVariablesToIFieldFromStruct(dataFromLoadBinery);
+            Debug.Log("Binary data load Done!");
+        }
+        else
+        {
+            Debug.Log("Error loading binary data!");
+        }
     }
-
 }
