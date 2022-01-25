@@ -9,8 +9,8 @@
 
 4. Создать файл и записать туда все переменные + строка.
 
-![изображение](https://user-images.githubusercontent.com/79563332/150601410-45b3580d-3b4e-4a00-b5ca-17b25989db9a.png)
+![изображение](https://user-images.githubusercontent.com/79563332/151041584-e6df830a-df15-431f-b2cc-8553e57075cc.png)
 
 Домашнее задание первого модуля д\з №4.  C# Unity
 
-![изображение](https://user-images.githubusercontent.com/79563332/150601508-7486b157-94ea-4236-8763-104e3b47ecbf.png)
+![изображение](https://user-images.githubusercontent.com/79563332/151041411-300aa62d-9521-4a94-aa41-f6980c179c56.png)
